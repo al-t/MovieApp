@@ -14,7 +14,9 @@ import android.widget.Toast;
  */
 public class MovieListFragment extends Fragment {
 
-    View view;
+    private View view;
+    private MoviesFetcher fetcher;
+    private GridView gridview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,7 +29,12 @@ public class MovieListFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        GridView gridview = (GridView) view.findViewById(R.id.gridview_movies);
+
+        fetcher = MoviesFetcher.getMoviesFetcher(view.getContext());
+
+        gridview = (GridView) view.findViewById(R.id.gridview_movies);
+        fetcher.getMovies(gridview);
+
         gridview.setAdapter(new ImageAdapter(getContext()));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -37,5 +44,9 @@ public class MovieListFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void updateList(View view, String[] moviesPics) {
+        //gridview.setAdapter(new ImageAdapter(getContext(), moviesPics));
     }
 }
