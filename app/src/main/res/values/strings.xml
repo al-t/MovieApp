@@ -10,4 +10,6 @@
     <string name="pref_movies_sort_order_default">popular</string>
     <string name="preferences_title">Preferences</string>
     <string name="action_settings">Settings</string>
+    <string name="popular_movies_list_title">Pop Movies</string>
+    <string name="top_rated_movies_list_title">Top Rated Movies</string>
 </resources>

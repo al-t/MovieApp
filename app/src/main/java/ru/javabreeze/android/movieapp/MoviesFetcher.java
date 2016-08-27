@@ -32,6 +32,14 @@ public class MoviesFetcher {
     private static Context context;
     private static GridView gridview;
 
+    static String getTypesOfMoviesFromPreferences(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPref.getString(
+                context.getString(R.string.pref_movies_sort_order_key),
+                context.getString(R.string.pref_movies_sort_order_default));
+    }
+
+
     public static MoviesFetcher getMoviesFetcher(Context context) {
         MoviesFetcher.context = context;
         if (fetcher != null) {
@@ -71,11 +79,7 @@ public class MoviesFetcher {
     }
 
     private Uri.Builder getMoviesUriBuilder() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        String moviesType = sharedPref.getString(
-                context.getString(R.string.pref_movies_sort_order_key),
-                context.getString(R.string.pref_movies_sort_order_default));
-        return getBaseUriBuilder().appendPath(moviesType);
+        return getBaseUriBuilder().appendPath(getTypesOfMoviesFromPreferences(context));
     }
 
     private class FetchMoviesTask extends AsyncTask<String, Void, String> {

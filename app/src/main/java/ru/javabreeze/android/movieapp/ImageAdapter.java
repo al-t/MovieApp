@@ -1,6 +1,8 @@
 package ru.javabreeze.android.movieapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +20,13 @@ import com.squareup.picasso.Picasso;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private String[] picsUrls;
-    private final String imagesUrlBase = "https://image.tmdb.org/t/p/w185";
+    private final String imagesUrlBase = "https://image.tmdb.org/t/p/";
+    private final String TAG = "ImageAdapter";
+
+    // Width and height of the pictures in the grid
+    private int picWidth;
+    private int picHeight;
+    private String imageWidthUrlAddition;
 
     public ImageAdapter(Context c) {
         mContext = c;
@@ -27,6 +35,35 @@ public class ImageAdapter extends BaseAdapter {
     public ImageAdapter(Context c, String[] picsUrls) {
         mContext = c;
         this.picsUrls = picsUrls;
+
+        /* Calculating width and height for pictures in the grid */
+        View gridView = ((Activity) c).findViewById(R.id.gridview_movies);
+        picWidth = gridView.getWidth()/2;
+        int orientation = c.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            picHeight = gridView.getHeight()/2;
+        } else {
+            picHeight = gridView.getHeight();
+        }
+        setImageWidthUrlAddition();
+    }
+
+    private void setImageWidthUrlAddition() {
+        if (picWidth <= 92) {
+            imageWidthUrlAddition = "w92";
+        } else if (picWidth <= 154) {
+            imageWidthUrlAddition = "w154";
+        } else if (picWidth <= 185) {
+            imageWidthUrlAddition = "w185";
+        } else if (picWidth <= 342) {
+            imageWidthUrlAddition = "w342";
+        } else if (picWidth <= 500) {
+            imageWidthUrlAddition = "w500";
+        } else if (picWidth <= 780) {
+            imageWidthUrlAddition = "w780";
+        } else {
+            imageWidthUrlAddition = "original";
+        }
     }
 
     public int getCount() {
@@ -48,12 +85,14 @@ public class ImageAdapter extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
+
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(185, 277));
+            imageView.setLayoutParams(new GridView.LayoutParams(picWidth, picHeight));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+            //imageView.setPadding(8, 8, 8, 8);
+            imageView.setPadding(0, 0, 0, 0);
         } else {
             imageView = (ImageView) convertView;
         }
@@ -61,10 +100,13 @@ public class ImageAdapter extends BaseAdapter {
         if (picsUrls == null) {
             imageView.setImageResource(mThumbIds[position]);
         } else {
-            //Log.v(Constants.LOG_TAG, "Position: " + position + "; url: " + picsUrls[position]);
-            Picasso.with(mContext).load(imagesUrlBase + picsUrls[position])
-                    .placeholder(R.drawable.interstellar)
-                    .error(R.drawable.interstellar)
+            String picUrl = imagesUrlBase + imageWidthUrlAddition + picsUrls[position];
+            if (Constants.DEBUG_IS_ON) {
+                Log.v(TAG, "Position: " + position + "; url: " + picUrl);
+            }
+            Picasso.with(mContext).load(picUrl)
+                    .placeholder(R.drawable.default_placeholder)
+                    .error(R.drawable.default_placeholder)
                     .into(imageView);
         }
 
@@ -73,16 +115,6 @@ public class ImageAdapter extends BaseAdapter {
 
     // references to our images
     private Integer[] mThumbIds = {
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar,
-            R.drawable.interstellar, R.drawable.interstellar
+            R.drawable.default_placeholder, R.drawable.default_placeholder
     };
 }

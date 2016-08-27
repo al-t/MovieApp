@@ -2,6 +2,7 @@ package ru.javabreeze.android.movieapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ public class MovieListFragment extends Fragment {
     private View view;
     private MoviesFetcher fetcher;
     private GridView gridview;
+    private final String TAG = "MovieListFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,7 +30,19 @@ public class MovieListFragment extends Fragment {
         return view;
     }
 
+    private void setListTitle() {
+        String moviesType = MoviesFetcher.getTypesOfMoviesFromPreferences(getContext());
+        //if (Constants.DEBUG_IS_ON) Log.v(TAG, "moviesType: " + moviesType);
+        String[] movies_sort_order_names = getResources().getStringArray(R.array.movies_sort_order_names);
+        if (moviesType.equals(movies_sort_order_names[0])) {
+            getActivity().setTitle(getString(R.string.popular_movies_list_title));
+        } else if (moviesType.equals(movies_sort_order_names[1])) {
+            getActivity().setTitle(getString(R.string.top_rated_movies_list_title));
+        }
+    }
+
     private void initViews(View view) {
+        setListTitle();
 
         fetcher = MoviesFetcher.getMoviesFetcher(view.getContext());
 
