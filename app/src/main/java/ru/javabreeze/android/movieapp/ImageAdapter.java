@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 /**
  * Created by Алексей on 16.06.2016.
+ *
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
@@ -60,7 +61,7 @@ public class ImageAdapter extends BaseAdapter {
         if (picsUrls == null) {
             imageView.setImageResource(mThumbIds[position]);
         } else {
-            Log.v(Constants.LOG_TAG, "Position: " + position + "; url: " + picsUrls[position]);
+            //Log.v(Constants.LOG_TAG, "Position: " + position + "; url: " + picsUrls[position]);
             Picasso.with(mContext).load(imagesUrlBase + picsUrls[position])
                     .placeholder(R.drawable.interstellar)
                     .error(R.drawable.interstellar)

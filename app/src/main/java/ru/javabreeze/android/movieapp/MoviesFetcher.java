@@ -24,6 +24,7 @@ import java.util.GregorianCalendar;
 
 /**
  * Created by Алексей on 16.06.2016.
+ * The class for fetching the movies using the api.themoviedb.org
  */
 public class MoviesFetcher {
 
@@ -110,7 +111,7 @@ public class MoviesFetcher {
 
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 if (inputStream == null) {
                     // Nothing to do.
                     return;
@@ -136,7 +137,7 @@ public class MoviesFetcher {
                 Log.e("PlaceholderFragment", "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
                 // to parse it.
-                return;
+                //return;
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -157,7 +158,7 @@ public class MoviesFetcher {
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                Log.v(Constants.LOG_TAG, result);
+                //Log.v(Constants.LOG_TAG, result);
                 try {
                     int moviesNumber = MovieDataParser.getNumberofPopularMovies(result);
                     //String[] moviesList = new String[moviesNumber];/*= MovieDataParser.getPopularPic(result);*/
